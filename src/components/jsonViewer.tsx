@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
+import React, { useState } from 'react';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 interface JsonViewerProps {
   title: string;
@@ -43,7 +43,7 @@ const JsonViewer: React.FC<JsonViewerProps> = ({ title, jsonData }) => {
             onClick={toggleCollapse}
             className="bg-blue-500 hover:bg-blue-600 text-white text-sm px-3 py-1 rounded"
           >
-            {isCollapsed ? "Genişlet" : "Daralt"}
+            {isCollapsed ? 'Genişlet' : 'Daralt'}
           </button>
         </div>
       </div>

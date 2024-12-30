@@ -1,4 +1,4 @@
-import useColorMode from "@/hooks/useColorMode";
+import useColorMode from '@/hooks/useColorMode';
 
 const DarkModeSwitcher = () => {
   const [colorMode, setColorMode] = useColorMode();
@@ -6,15 +6,15 @@ const DarkModeSwitcher = () => {
   return (
     <div
       onClick={() => {
-        if (typeof setColorMode === "function") {
-          setColorMode(colorMode === "light" ? "dark" : "light");
+        if (typeof setColorMode === 'function') {
+          setColorMode(colorMode === 'light' ? 'dark' : 'light');
         }
       }}
       className="flex items-center gap-2 2xsm:gap-4 rounded-lg py-4 bg-gray-200 dark:bg-gray-700 cursor-pointer"
     >
       <label
         className={`relative m-0 block h-7.5 w-14 rounded-full ${
-          colorMode === "dark" ? "bg-primary" : "bg-stroke"
+          colorMode === 'dark' ? 'bg-primary' : 'bg-stroke'
         }`}
       >
         <input
@@ -23,7 +23,7 @@ const DarkModeSwitcher = () => {
         />
         <span
           className={`absolute left-[3px] top-1/2 flex h-6 w-6 -translate-y-1/2 translate-x-0 items-center justify-center rounded-full bg-white shadow-switcher duration-75 ease-linear ${
-            colorMode === "dark" && "!right-[3px] !translate-x-full"
+            colorMode === 'dark' && '!right-[3px] !translate-x-full'
           }`}
         >
           <span className="dark:hidden">

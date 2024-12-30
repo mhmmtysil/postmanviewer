@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
-import openapi from "../data/collection.json";
+import React, { useCallback, useEffect, useState } from 'react';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import openapi from '../data/collection.json';
 
 interface RequestExampleProps {
   method: string;
@@ -15,18 +15,18 @@ const RequestExample: React.FC<RequestExampleProps> = ({
   requestBody,
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState("cURL");
+  const [selectedLanguage, setSelectedLanguage] = useState('cURL');
   const [showTestModal, setShowTestModal] = useState(false);
   const [testResponse, setTestResponse] = useState<any>(null);
   const [testHeaders, setTestHeaders] = useState<{ [key: string]: string }>({
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   });
   const [testBody, setTestBody] = useState(
-    JSON.stringify(requestBody || {}, null, 2)
+    JSON.stringify(requestBody || {}, null, 2),
   );
   const [pathParams, setPathParams] = useState<{ [key: string]: string }>({});
   const [queryParams, setQueryParams] = useState<{ [key: string]: string }>({});
-  const [activeTab, setActiveTab] = useState("headers");
+  const [activeTab, setActiveTab] = useState('headers');
   const [loading, setLoading] = useState(false);
   const [pathParameters, setPathParameters] = useState<any[]>([]);
   const [queryParameters, setQueryParameters] = useState<any[]>([]);
@@ -35,12 +35,12 @@ const RequestExample: React.FC<RequestExampleProps> = ({
   const getPathAndQueryParams = useCallback(() => {
     const paths = openapi.paths;
     for (const [pathUrl, pathObj] of Object.entries(paths)) {
-      const normalizedPathUrl = pathUrl.replace(/\{([^}]+)\}/g, "{$1}");
-      const normalizedUrl = url.replace(/\{([^}]+)\}/g, "{$1}");
+      const normalizedPathUrl = pathUrl.replace(/\{([^}]+)\}/g, '{$1}');
+      const normalizedUrl = url.replace(/\{([^}]+)\}/g, '{$1}');
 
       if (normalizedPathUrl === normalizedUrl) {
         const methodKey = method.toLowerCase();
-        if (typeof pathObj === "object" && pathObj !== null) {
+        if (typeof pathObj === 'object' && pathObj !== null) {
           const methodOperations = pathObj as {
             [key: string]: {
               parameters?: Array<{
@@ -52,7 +52,7 @@ const RequestExample: React.FC<RequestExampleProps> = ({
               }>;
               requestBody?: {
                 content?: {
-                  "application/json"?: {
+                  'application/json'?: {
                     schema?: any;
                   };
                 };
@@ -63,9 +63,9 @@ const RequestExample: React.FC<RequestExampleProps> = ({
           const operation = methodOperations[methodKey];
           if (operation) {
             const pathParams =
-              operation.parameters?.filter((p) => p.in === "path") || [];
+              operation.parameters?.filter((p) => p.in === 'path') || [];
             const queryParams =
-              operation.parameters?.filter((p) => p.in === "query") || [];
+              operation.parameters?.filter((p) => p.in === 'query') || [];
 
             setPathParameters(pathParams);
             setQueryParameters(queryParams);
@@ -73,19 +73,19 @@ const RequestExample: React.FC<RequestExampleProps> = ({
             // Path parametrelerini otomatik doldur
             const initialPathParams: { [key: string]: string } = {};
             pathParams.forEach((param) => {
-              initialPathParams[param.name] = "";
+              initialPathParams[param.name] = '';
             });
             setPathParams(initialPathParams);
 
             // Query parametrelerini otomatik doldur
             const initialQueryParams: { [key: string]: string } = {};
             queryParams.forEach((param) => {
-              initialQueryParams[param.name] = "";
+              initialQueryParams[param.name] = '';
             });
             setQueryParams(initialQueryParams);
 
             // Request body'yi otomatik doldur
-            if (operation.requestBody && method.toUpperCase() !== "GET") {
+            if (operation.requestBody && method.toUpperCase() !== 'GET') {
               setTestBody(JSON.stringify(requestBody || {}, null, 2));
             }
 
@@ -101,17 +101,17 @@ const RequestExample: React.FC<RequestExampleProps> = ({
   }, [getPathAndQueryParams]);
 
   const languages = [
-    "cURL",
-    "JavaScript",
-    "Python",
-    "Java",
-    "Go",
-    "C#",
-    "Kotlin",
-    "Objective-C",
-    "PHP",
-    "Ruby",
-    "Swift",
+    'cURL',
+    'JavaScript',
+    'Python',
+    'Java',
+    'Go',
+    'C#',
+    'Kotlin',
+    'Objective-C',
+    'PHP',
+    'Ruby',
+    'Swift',
   ];
 
   const toggleCollapse = () => {
@@ -124,7 +124,7 @@ const RequestExample: React.FC<RequestExampleProps> = ({
       const baseUrl =
         openapi.servers?.[0]?.url ||
         process.env.NEXT_PUBLIC_API_URL ||
-        "http://localhost:3000";
+        'http://localhost:3000';
 
       let finalUrl = url;
       Object.entries(pathParams).forEach(([key, value]) => {
@@ -134,29 +134,29 @@ const RequestExample: React.FC<RequestExampleProps> = ({
       const queryString = Object.entries(queryParams)
         .map(
           ([key, value]) =>
-            `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+            `${encodeURIComponent(key)}=${encodeURIComponent(value)}`,
         )
-        .join("&");
+        .join('&');
 
       const fullUrl = `${baseUrl}${finalUrl}${
-        queryString ? `?${queryString}` : ""
+        queryString ? `?${queryString}` : ''
       }`;
 
       const requestOptions: RequestInit = {
         method: method.toUpperCase(),
         headers: testHeaders,
-        credentials: "include",
+        credentials: 'include',
       };
 
-      if (method.toUpperCase() !== "GET") {
+      if (method.toUpperCase() !== 'GET') {
         requestOptions.body = testBody;
       }
 
       const response = await fetch(fullUrl, requestOptions);
 
       let data;
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
         data = await response.json();
       } else {
         data = await response.text();
@@ -169,55 +169,55 @@ const RequestExample: React.FC<RequestExampleProps> = ({
       });
     } catch (error: any) {
       setTestResponse({
-        error: error.message || "Bir hata oluştu",
+        error: error.message || 'Bir hata oluştu',
       });
     }
     setLoading(false);
   };
 
   const getCodeSnippet = () => {
-    const baseUrl = openapi.servers?.[0]?.url || "http://localhost:3000";
+    const baseUrl = openapi.servers?.[0]?.url || 'http://localhost:3000';
     const queryString = Object.entries(queryParams)
       .map(
         ([key, value]) =>
-          `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+          `${encodeURIComponent(key)}=${encodeURIComponent(value)}`,
       )
-      .join("&");
-    const fullUrl = `${baseUrl}${url}${queryString ? `?${queryString}` : ""}`;
+      .join('&');
+    const fullUrl = `${baseUrl}${url}${queryString ? `?${queryString}` : ''}`;
 
     switch (selectedLanguage) {
-      case "cURL":
+      case 'cURL':
         return `curl -X ${method.toUpperCase()} "${fullUrl}" \\
   -H "Content-Type: application/json" \\
   ${
-    method.toUpperCase() !== "GET" ? `-d '${JSON.stringify(requestBody)}'` : ""
+    method.toUpperCase() !== 'GET' ? `-d '${JSON.stringify(requestBody)}'` : ''
   }`;
 
-      case "JavaScript":
+      case 'JavaScript':
         return `fetch("${fullUrl}", {
   method: "${method.toUpperCase()}",
   headers: {
     "Content-Type": "application/json",
   },
   ${
-    method.toUpperCase() !== "GET"
+    method.toUpperCase() !== 'GET'
       ? `body: JSON.stringify(${JSON.stringify(requestBody)})`
-      : ""
+      : ''
   }
 })
 .then(response => response.json())
 .then(data => console.log(data));`;
 
       default:
-        return "Seçilen dil için örnek kod henüz eklenmedi.";
+        return 'Seçilen dil için örnek kod henüz eklenmedi.';
     }
   };
 
   const handleModalOpen = () => {
     setShowTestModal(true);
-    setTestHeaders({ "Content-Type": "application/json" });
+    setTestHeaders({ 'Content-Type': 'application/json' });
     setTestBody(JSON.stringify(requestBody || {}, null, 2));
-    setActiveTab("headers");
+    setActiveTab('headers');
   };
 
   return (
@@ -227,13 +227,13 @@ const RequestExample: React.FC<RequestExampleProps> = ({
         <div className="flex items-center gap-2">
           <span
             className={`uppercase text-sm font-semibold px-2 py-1 rounded ${
-              method === "get"
-                ? "bg-green-200 text-green-700"
-                : method === "post"
-                ? "bg-blue-200 text-blue-700"
-                : method === "put"
-                ? "bg-yellow-200 text-yellow-700"
-                : "bg-red-200 text-red-700"
+              method === 'get'
+                ? 'bg-green-200 text-green-700'
+                : method === 'post'
+                ? 'bg-blue-200 text-blue-700'
+                : method === 'put'
+                ? 'bg-yellow-200 text-yellow-700'
+                : 'bg-red-200 text-red-700'
             }`}
           >
             {method}
@@ -269,13 +269,13 @@ const RequestExample: React.FC<RequestExampleProps> = ({
                 <div className="flex items-center">
                   <div
                     className={`inline-flex items-center p-2 rounded text-sm font-semibold ${
-                      method === "get"
-                        ? "bg-green-200 text-green-700"
-                        : method === "post"
-                        ? "bg-blue-200 text-blue-700"
-                        : method === "put"
-                        ? "bg-yellow-200 text-yellow-700"
-                        : "bg-red-200 text-red-700"
+                      method === 'get'
+                        ? 'bg-green-200 text-green-700'
+                        : method === 'post'
+                        ? 'bg-blue-200 text-blue-700'
+                        : method === 'put'
+                        ? 'bg-yellow-200 text-yellow-700'
+                        : 'bg-red-200 text-red-700'
                     }`}
                   >
                     {method.toUpperCase()}
@@ -283,24 +283,24 @@ const RequestExample: React.FC<RequestExampleProps> = ({
                   <div className="flex-1 p-2 dark:bg-gray-700">
                     {openapi.servers?.[0]?.url ||
                       process.env.NEXT_PUBLIC_API_URL ||
-                      "http://localhost:3000"}
+                      'http://localhost:3000'}
                     {Object.entries(pathParams).reduce(
                       (acc, [key, value]) => acc.replace(`{${key}}`, value),
-                      url
+                      url,
                     )}
-                    {Object.keys(queryParams).length > 0 && "?"}
+                    {Object.keys(queryParams).length > 0 && '?'}
                     {Object.entries(queryParams)
                       .map(([key, value]) => `${key}=${value}`)
-                      .join("&")}
+                      .join('&')}
                   </div>
                   <button
                     onClick={handleTest}
                     disabled={loading}
                     className={`px-4 py-2 rounded ${
-                      loading ? "bg-gray-500" : "bg-blue-500 hover:bg-blue-600"
+                      loading ? 'bg-gray-500' : 'bg-blue-500 hover:bg-blue-600'
                     } text-white`}
                   >
-                    {loading ? "İstek Gönderiliyor..." : "İstek Gönder"}
+                    {loading ? 'İstek Gönderiliyor...' : 'İstek Gönder'}
                   </button>
                 </div>
               </div>
@@ -309,36 +309,36 @@ const RequestExample: React.FC<RequestExampleProps> = ({
               <div className="flex border-b mb-4">
                 <button
                   className={`px-4 py-2 ${
-                    activeTab === "headers" ? "border-b-2 border-blue-500" : ""
+                    activeTab === 'headers' ? 'border-b-2 border-blue-500' : ''
                   }`}
-                  onClick={() => setActiveTab("headers")}
+                  onClick={() => setActiveTab('headers')}
                 >
                   Headers ({Object.keys(testHeaders).length})
                 </button>
                 <button
                   className={`px-4 py-2 ${
-                    activeTab === "parameters"
-                      ? "border-b-2 border-blue-500"
-                      : ""
+                    activeTab === 'parameters'
+                      ? 'border-b-2 border-blue-500'
+                      : ''
                   }`}
-                  onClick={() => setActiveTab("parameters")}
+                  onClick={() => setActiveTab('parameters')}
                 >
                   Parameters ({pathParameters.length})
                 </button>
                 <button
                   className={`px-4 py-2 ${
-                    activeTab === "query" ? "border-b-2 border-blue-500" : ""
+                    activeTab === 'query' ? 'border-b-2 border-blue-500' : ''
                   }`}
-                  onClick={() => setActiveTab("query")}
+                  onClick={() => setActiveTab('query')}
                 >
                   Query ({queryParameters.length})
                 </button>
-                {method.toUpperCase() !== "GET" && (
+                {method.toUpperCase() !== 'GET' && (
                   <button
                     className={`px-4 py-2 ${
-                      activeTab === "body" ? "border-b-2 border-blue-500" : ""
+                      activeTab === 'body' ? 'border-b-2 border-blue-500' : ''
                     }`}
-                    onClick={() => setActiveTab("body")}
+                    onClick={() => setActiveTab('body')}
                   >
                     Body
                   </button>
@@ -347,7 +347,7 @@ const RequestExample: React.FC<RequestExampleProps> = ({
 
               {/* Tab Content */}
               <div className="mb-4">
-                {activeTab === "headers" && (
+                {activeTab === 'headers' && (
                   <div>
                     <div className="space-y-2">
                       {Object.entries(testHeaders).map(([key, value]) => (
@@ -372,7 +372,7 @@ const RequestExample: React.FC<RequestExampleProps> = ({
                   </div>
                 )}
 
-                {activeTab === "parameters" && (
+                {activeTab === 'parameters' && (
                   <div>
                     {pathParameters.map((param) => (
                       <div key={param.name} className="flex gap-2 mb-2">
@@ -384,7 +384,7 @@ const RequestExample: React.FC<RequestExampleProps> = ({
                         </span>
                         <input
                           className="flex-1 p-2 border rounded dark:bg-gray-700"
-                          value={pathParams[param.name] || ""}
+                          value={pathParams[param.name] || ''}
                           onChange={(e) =>
                             setPathParams((prev) => ({
                               ...prev,
@@ -400,7 +400,7 @@ const RequestExample: React.FC<RequestExampleProps> = ({
                   </div>
                 )}
 
-                {activeTab === "query" && (
+                {activeTab === 'query' && (
                   <div>
                     {queryParameters.map((param) => (
                       <div key={param.name} className="flex gap-2 mb-2">
@@ -412,7 +412,7 @@ const RequestExample: React.FC<RequestExampleProps> = ({
                         </span>
                         <input
                           className="flex-1 p-2 border rounded dark:bg-gray-700"
-                          value={queryParams[param.name] || ""}
+                          value={queryParams[param.name] || ''}
                           onChange={(e) =>
                             setQueryParams((prev) => ({
                               ...prev,
@@ -428,7 +428,7 @@ const RequestExample: React.FC<RequestExampleProps> = ({
                   </div>
                 )}
 
-                {activeTab === "body" && method.toUpperCase() !== "GET" && (
+                {activeTab === 'body' && method.toUpperCase() !== 'GET' && (
                   <div>
                     <textarea
                       className="w-full h-40 p-2 font-mono text-sm border rounded dark:bg-gray-700"
@@ -487,7 +487,7 @@ const RequestExample: React.FC<RequestExampleProps> = ({
           onClick={toggleCollapse}
           className="text-sm bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md transition"
         >
-          {isCollapsed ? "Kodu Genişlet" : "Kodu Daralt"}
+          {isCollapsed ? 'Kodu Genişlet' : 'Kodu Daralt'}
         </button>
         {!isCollapsed && (
           <div className="mt-4">

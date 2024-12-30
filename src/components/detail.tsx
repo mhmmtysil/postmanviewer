@@ -1,46 +1,46 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
-import openapi from "../data/collection.json";
-import ResponseTemplate from "./responseTemplate";
+import dynamic from 'next/dynamic';
+import { useEffect, useState } from 'react';
+import openapi from '../data/collection.json';
+import ResponseTemplate from './responseTemplate';
 
 // JsonViewer'ı dinamik olarak import et
-const JsonViewer = dynamic(() => import("./jsonViewer"), {
+const JsonViewer = dynamic(() => import('./jsonViewer'), {
   ssr: false,
 });
 
-const RequestTemplate = dynamic(() => import("./requestTemplate"), {
+const RequestTemplate = dynamic(() => import('./requestTemplate'), {
   ssr: false,
 });
 
 const Detail = ({}) => {
-  const [endpoint, setEndpoint] = useState<string>("");
-  const [path, setPath] = useState<string>("");
-  const [method, setMethod] = useState<string>("");
+  const [endpoint, setEndpoint] = useState<string>('');
+  const [path, setPath] = useState<string>('');
+  const [method, setMethod] = useState<string>('');
   const [endpointDetails, setEndpointDetails] = useState<any>(null);
-  const [activeResponseTab, setActiveResponseTab] = useState<string>("200");
+  const [activeResponseTab, setActiveResponseTab] = useState<string>('200');
 
   // HTTP metodları için renk kodları
   const methodColors = {
-    get: "text-blue-600 dark:text-blue-400",
-    post: "text-green-600 dark:text-green-400",
-    put: "text-yellow-600 dark:text-yellow-400",
-    delete: "text-red-600 dark:text-red-400",
-    patch: "text-purple-600 dark:text-purple-400",
+    get: 'text-blue-600 dark:text-blue-400',
+    post: 'text-green-600 dark:text-green-400',
+    put: 'text-yellow-600 dark:text-yellow-400',
+    delete: 'text-red-600 dark:text-red-400',
+    patch: 'text-purple-600 dark:text-purple-400',
   };
 
   // HTTP durum kodları için renk kodları
   const statusColors = {
-    "200": "text-green-600 dark:text-green-400",
-    "201": "text-green-600 dark:text-green-400",
-    "204": "text-green-600 dark:text-green-400",
-    "400": "text-yellow-600 dark:text-yellow-400",
-    "401": "text-red-600 dark:text-red-400",
-    "403": "text-red-600 dark:text-red-400",
-    "404": "text-red-600 dark:text-red-400",
-    "405": "text-yellow-600 dark:text-yellow-400",
-    "500": "text-red-600 dark:text-red-400",
+    '200': 'text-green-600 dark:text-green-400',
+    '201': 'text-green-600 dark:text-green-400',
+    '204': 'text-green-600 dark:text-green-400',
+    '400': 'text-yellow-600 dark:text-yellow-400',
+    '401': 'text-red-600 dark:text-red-400',
+    '403': 'text-red-600 dark:text-red-400',
+    '404': 'text-red-600 dark:text-red-400',
+    '405': 'text-yellow-600 dark:text-yellow-400',
+    '500': 'text-red-600 dark:text-red-400',
   };
 
   useEffect(() => {
@@ -50,13 +50,13 @@ const Detail = ({}) => {
 
       if (hash) {
         setEndpoint(hash);
-        const [methodPart, ...pathParts] = hash.split("-");
+        const [methodPart, ...pathParts] = hash.split('-');
 
         // URL'deki Request Bodyni düzelt ve - işaretini / ile değiştir
-        const pathValue = `/${pathParts.join("/")}`
-          .replace(/%2F/g, "/")
-          .replace(/%7B/g, "{")
-          .replace(/%7D/g, "}");
+        const pathValue = `/${pathParts.join('/')}`
+          .replace(/%2F/g, '/')
+          .replace(/%7B/g, '{')
+          .replace(/%7D/g, '}');
 
         setMethod(methodPart);
         setPath(pathValue);
@@ -65,11 +65,11 @@ const Detail = ({}) => {
         const paths = openapi.paths || {};
 
         Object.entries(paths).forEach(([path, methods]: [string, any]) => {
-          const normalizedPath = path.replace(/\{.*?\}/g, ".*");
+          const normalizedPath = path.replace(/\{.*?\}/g, '.*');
           const regex = new RegExp(`^${normalizedPath}$`);
 
           // Path'deki - işaretlerini / ile değiştir ve kontrol et
-          const normalizedPathValue = pathValue.replace(/-/g, "/");
+          const normalizedPathValue = pathValue.replace(/-/g, '/');
 
           if (regex.test(normalizedPathValue)) {
             const methodDetails = methods[methodPart.toLowerCase()];
@@ -82,7 +82,7 @@ const Detail = ({}) => {
               // Endpoint'e scroll yap
               const element = document.getElementById(hash);
               if (element) {
-                element.scrollIntoView({ behavior: "smooth" });
+                element.scrollIntoView({ behavior: 'smooth' });
               }
             }
           }
@@ -94,17 +94,17 @@ const Detail = ({}) => {
     handleHashChange();
 
     // Hash değişikliklerini dinle
-    window.addEventListener("hashchange", handleHashChange);
+    window.addEventListener('hashchange', handleHashChange);
 
     // Cleanup
     return () => {
-      window.removeEventListener("hashchange", handleHashChange);
+      window.removeEventListener('hashchange', handleHashChange);
     };
   }, []);
 
   // İstek gövdesi ve yanıtlar bilgisi
   const requestBody =
-    endpointDetails?.requestBody?.content?.["application/json"]?.schema
+    endpointDetails?.requestBody?.content?.['application/json']?.schema
       ?.properties || [];
   const responses = endpointDetails?.responses || {};
 
@@ -116,13 +116,13 @@ const Detail = ({}) => {
             ([methodKey, details]: [string, any]) => {
               const endpointId = `${methodKey}-${pathKey
                 .slice(1)
-                .replace(/\//g, "-")}`;
+                .replace(/\//g, '-')}`;
 
               // Path ve Query parametrelerini ayır
               const pathParams =
-                details.parameters?.filter((p: any) => p.in === "path") || [];
+                details.parameters?.filter((p: any) => p.in === 'path') || [];
               const queryParams =
-                details.parameters?.filter((p: any) => p.in === "query") || [];
+                details.parameters?.filter((p: any) => p.in === 'query') || [];
 
               return (
                 <div
@@ -144,26 +144,26 @@ const Detail = ({}) => {
                         }
                       >
                         {methodKey.toUpperCase()}
-                      </span>{" "}
-                      {details.summary || "Endpoint Detayı"}
+                      </span>{' '}
+                      {details.summary || 'Endpoint Detayı'}
                     </h2>
 
                     {/* Açıklama */}
                     <div className="prose dark:prose-invert prose-neutral max-w-full prose-img:max-w-prose mt-4">
-                      <p>{details.description || "Açıklama bulunamadı."}</p>
+                      <p>{details.description || 'Açıklama bulunamadı.'}</p>
                     </div>
 
                     {/* İstek Gövdesi - Sadece POST, PUT, PATCH metodları için */}
-                    {["post", "put", "patch"].includes(
-                      methodKey.toLowerCase()
+                    {['post', 'put', 'patch'].includes(
+                      methodKey.toLowerCase(),
                     ) &&
-                      details.requestBody?.content?.["application/json"]?.schema
+                      details.requestBody?.content?.['application/json']?.schema
                         ?.properties && (
                         <div className="mt-6 w-full">
                           <JsonViewer
                             title="İstek Gövdesi"
                             jsonData={
-                              details.requestBody.content["application/json"]
+                              details.requestBody.content['application/json']
                                 .schema.properties
                             }
                           />
@@ -196,14 +196,14 @@ const Detail = ({}) => {
                                 )}
                               </div>
                               <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">
-                                {parameter.description || "Açıklama bulunamadı"}
+                                {parameter.description || 'Açıklama bulunamadı'}
                               </p>
                               <div className="text-sm mt-1">
                                 <span className="text-gray-500 dark:text-gray-400">
-                                  Tip:{" "}
+                                  Tip:{' '}
                                 </span>
                                 <code className="text-sm bg-gray-100 dark:bg-gray-700 px-1 py-0.5 rounded">
-                                  {parameter.schema?.type || "belirsiz"}
+                                  {parameter.schema?.type || 'belirsiz'}
                                 </code>
                               </div>
                             </div>
@@ -213,7 +213,7 @@ const Detail = ({}) => {
                     )}
 
                     {/* Query Parametreleri - Özellikle GET metodu için */}
-                    {methodKey.toLowerCase() === "get" &&
+                    {methodKey.toLowerCase() === 'get' &&
                       queryParams.length > 0 && (
                         <div className="mt-6 w-full">
                           <h3 className="text-lg font-semibold mb-4">
@@ -240,14 +240,14 @@ const Detail = ({}) => {
                                 </div>
                                 <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">
                                   {parameter.description ||
-                                    "Açıklama bulunamadı"}
+                                    'Açıklama bulunamadı'}
                                 </p>
                                 <div className="text-sm mt-1">
                                   <span className="text-gray-500 dark:text-gray-400">
-                                    Tip:{" "}
+                                    Tip:{' '}
                                   </span>
                                   <code className="text-sm bg-gray-100 dark:bg-gray-700 px-1 py-0.5 rounded">
-                                    {parameter.schema?.type || "belirsiz"}
+                                    {parameter.schema?.type || 'belirsiz'}
                                   </code>
                                 </div>
                               </div>
@@ -275,7 +275,7 @@ const Detail = ({}) => {
                                         statusCode as keyof typeof statusColors
                                       ]
                                     }`
-                                  : "text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800"
+                                  : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
                               }`}
                             >
                               {statusCode}
@@ -289,16 +289,16 @@ const Detail = ({}) => {
                                 key={statusCode}
                                 className={`${
                                   activeResponseTab === statusCode
-                                    ? "block"
-                                    : "hidden"
+                                    ? 'block'
+                                    : 'hidden'
                                 }`}
                               >
-                                {response.content?.["application/json"]?.schema
+                                {response.content?.['application/json']?.schema
                                   ?.properties && (
                                   <div className="space-y-4">
                                     {Object.entries(
-                                      response.content["application/json"]
-                                        .schema.properties
+                                      response.content['application/json']
+                                        .schema.properties,
                                     ).map(([key, value]: [string, any]) => (
                                       <div
                                         key={key}
@@ -329,7 +329,7 @@ const Detail = ({}) => {
                                   </div>
                                 )}
                               </div>
-                            )
+                            ),
                           )}
                         </div>
                       </div>
@@ -340,7 +340,7 @@ const Detail = ({}) => {
                       method={methodKey}
                       url={pathKey}
                       requestBody={
-                        details.requestBody?.content?.["application/json"]
+                        details.requestBody?.content?.['application/json']
                           ?.schema?.properties || {}
                       }
                     />
@@ -352,9 +352,9 @@ const Detail = ({}) => {
                   </div>
                 </div>
               );
-            }
+            },
           );
-        }
+        },
       )}
     </div>
   );

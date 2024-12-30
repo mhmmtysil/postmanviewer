@@ -1,0 +1,25 @@
+{
+  "java.configuration.updateBuildConfiguration": "disabled",
+  "editor.formatOnSave": true,
+  "files.trimTrailingWhitespace": true,
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": true
+  },
+  "editor.snippetSuggestions": "top",
+  "editor.wordWrap": "on",
+  "typescript.suggest.autoImports": true,
+  "javascript.suggest.autoImports": true,
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "all",
+  "terminal.integrated.scrollback": 10000,
+  "debug.inlineValues": "on",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "always",
+    "source.organizeImports": "always",
+    "source.sortMembers": "always"
+  },
+  "java.compile.nullAnalysis.mode": "disabled",
+  "cSpell.words": ["Sonucu"]
+}

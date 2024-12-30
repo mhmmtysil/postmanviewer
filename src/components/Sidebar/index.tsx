@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import React, { useEffect, useRef, useState } from "react";
-import openapi from "../../data/collection.json";
+import React, { useEffect, useRef, useState } from 'react';
+import openapi from '../../data/collection.json';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -10,7 +10,7 @@ interface SidebarProps {
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>(
-    {}
+    {},
   );
   const tags = openapi.tags || [];
   const paths = openapi.paths || {};
@@ -18,10 +18,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
 
-  let storedSidebarExpanded = "true";
+  let storedSidebarExpanded = 'true';
 
   const [sidebarExpanded, setSidebarExpanded] = useState(
-    storedSidebarExpanded === null ? false : storedSidebarExpanded === "true"
+    storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true',
   );
 
   useEffect(() => {
@@ -35,25 +35,25 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         return;
       setSidebarOpen(false);
     };
-    document.addEventListener("click", clickHandler);
-    return () => document.removeEventListener("click", clickHandler);
+    document.addEventListener('click', clickHandler);
+    return () => document.removeEventListener('click', clickHandler);
   });
 
   useEffect(() => {
     const keyHandler = ({ key }: KeyboardEvent) => {
-      if (!sidebarOpen || key !== "Escape") return;
+      if (!sidebarOpen || key !== 'Escape') return;
       setSidebarOpen(false);
     };
-    document.addEventListener("keydown", keyHandler);
-    return () => document.removeEventListener("keydown", keyHandler);
+    document.addEventListener('keydown', keyHandler);
+    return () => document.removeEventListener('keydown', keyHandler);
   });
 
   useEffect(() => {
-    localStorage.setItem("sidebar-expanded", sidebarExpanded.toString());
+    localStorage.setItem('sidebar-expanded', sidebarExpanded.toString());
     if (sidebarExpanded) {
-      document.querySelector("body")?.classList.add("sidebar-expanded");
+      document.querySelector('body')?.classList.add('sidebar-expanded');
     } else {
-      document.querySelector("body")?.classList.remove("sidebar-expanded");
+      document.querySelector('body')?.classList.remove('sidebar-expanded');
     }
   }, [sidebarExpanded]);
 
@@ -73,7 +73,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   };
 
   const handleMethodClick = (path: string, method: string) => {
-    const anchor = `${method}-${path.slice(1).replace(/\//g, "-")}`;
+    const anchor = `${method}-${path.slice(1).replace(/\//g, '-')}`;
     window.location.hash = anchor;
   };
 
@@ -81,8 +81,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     <aside
       ref={sidebar}
       className={`absolute left-0 top-0 z-[1] border-r border-gray-200 dark:border-gray-800 flex h-screen w-72.5 p-4 flex-col overflow-y-hidden bg-white dark:bg-gray-900 duration-300 ease-linear lg:static lg:translate-x-0 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+      }`}
     >
       <button
         ref={trigger}
@@ -126,7 +126,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               strokeLinecap="round"
               strokeLinejoin="round"
               className={`transform transition-transform ${
-                openSections[tag.name] ? "rotate-90" : ""
+                openSections[tag.name] ? 'rotate-90' : ''
               }`}
             >
               <path d="M9 18l6-6-6-6"></path>
@@ -137,8 +137,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               {Object.entries(paths)
                 .filter(([_, pathDetails]: any) =>
                   pathDetails?.[Object.keys(pathDetails)[0]]?.tags?.includes(
-                    tag.name
-                  )
+                    tag.name,
+                  ),
                 )
                 .map(([path, pathDetails]: any) => (
                   <li key={path}>
@@ -154,19 +154,19 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           </p>
                           <span
                             className={`uppercase font-mono text-xs px-2 py-1 rounded ${
-                              method === "get"
-                                ? "bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-200"
-                                : method === "post"
-                                ? "bg-blue-100 text-blue-700 dark:bg-blue-800 dark:text-blue-200"
-                                : method === "delete"
-                                ? "bg-red-100 text-red-700 dark:bg-red-800 dark:text-red-200"
-                                : "bg-yellow-100 text-yellow-700 dark:bg-yellow-800 dark:text-yellow-200"
+                              method === 'get'
+                                ? 'bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-200'
+                                : method === 'post'
+                                ? 'bg-blue-100 text-blue-700 dark:bg-blue-800 dark:text-blue-200'
+                                : method === 'delete'
+                                ? 'bg-red-100 text-red-700 dark:bg-red-800 dark:text-red-200'
+                                : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-800 dark:text-yellow-200'
                             }`}
                           >
                             {method}
                           </span>
                         </div>
-                      )
+                      ),
                     )}
                   </li>
                 ))}

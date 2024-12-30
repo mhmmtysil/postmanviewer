@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import React, { useState, ReactNode } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import Header from "../Header/index.jsx";
-import Sidebar from "../Sidebar";
+import React, { useState } from 'react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Header from '../Header/index.jsx';
+import Sidebar from '../Sidebar';
 
 export default function DefaultLayout({
   children,

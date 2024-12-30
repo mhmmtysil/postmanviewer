@@ -1,5 +1,5 @@
-"use client";
-import { useEffect, useState } from "react";
+'use client';
+import { useEffect, useState } from 'react';
 
 type SetValue<T> = T | ((val: T) => T);
 
@@ -9,7 +9,7 @@ function useLocalStorage<T>(
 ): [T, (value: SetValue<T>) => void] {
   const [storedValue, setStoredValue] = useState(() => {
     try {
-      if (typeof window !== "undefined") {
+      if (typeof window !== 'undefined') {
         const item = window.localStorage.getItem(key);
         return item ? JSON.parse(item) : initialValue;
       }
@@ -22,11 +22,11 @@ function useLocalStorage<T>(
   useEffect(() => {
     try {
       const valueToStore =
-        typeof storedValue === "function"
+        typeof storedValue === 'function'
           ? storedValue(storedValue)
           : storedValue;
       // Save state
-      if (typeof window !== "undefined") {
+      if (typeof window !== 'undefined') {
         window.localStorage.setItem(key, JSON.stringify(valueToStore));
       }
     } catch (error) {

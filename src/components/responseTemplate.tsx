@@ -1,5 +1,5 @@
-import React from 'react';
 import dynamic from 'next/dynamic';
+import React from 'react';
 
 const JsonViewer = dynamic(() => import('./jsonViewer'), {
   ssr: false,
@@ -22,17 +22,21 @@ interface ResponseTemplateProps {
   setActiveResponseTab: (tab: string) => void;
 }
 
-const ResponseTemplate: React.FC<ResponseTemplateProps> = ({ details, activeResponseTab, setActiveResponseTab }) => {
+const ResponseTemplate: React.FC<ResponseTemplateProps> = ({
+  details,
+  activeResponseTab,
+  setActiveResponseTab,
+}) => {
   const statusColors = {
     '200': 'text-green-600 dark:text-green-400',
-    '201': 'text-green-600 dark:text-green-400', 
+    '201': 'text-green-600 dark:text-green-400',
     '204': 'text-green-600 dark:text-green-400',
     '400': 'text-yellow-600 dark:text-yellow-400',
     '401': 'text-red-600 dark:text-red-400',
     '403': 'text-red-600 dark:text-red-400',
     '404': 'text-red-600 dark:text-red-400',
     '405': 'text-yellow-600 dark:text-yellow-400',
-    '500': 'text-red-600 dark:text-red-400'
+    '500': 'text-red-600 dark:text-red-400',
   };
 
   return (
@@ -48,9 +52,9 @@ const ResponseTemplate: React.FC<ResponseTemplateProps> = ({ details, activeResp
                 ? `bg-background ${
                     statusColors[code as keyof typeof statusColors]
                   } shadow`
-                : "hover:bg-accent hover:text-accent-foreground"
+                : 'hover:bg-accent hover:text-accent-foreground'
             }`}
-            data-state={activeResponseTab === code ? "active" : ""}
+            data-state={activeResponseTab === code ? 'active' : ''}
           >
             {code}
           </button>
@@ -61,14 +65,14 @@ const ResponseTemplate: React.FC<ResponseTemplateProps> = ({ details, activeResp
           ([code, response]: [string, any]) => (
             <div
               key={code}
-              className={`${activeResponseTab === code ? "block" : "hidden"}`}
+              className={`${activeResponseTab === code ? 'block' : 'hidden'}`}
             >
               <JsonViewer
-                title={`${code} - ${response.description || "Açıklama yok."}`}
-                jsonData={response.content?.["application/json"]?.schema || {}}
+                title={`${code} - ${response.description || 'Açıklama yok.'}`}
+                jsonData={response.content?.['application/json']?.schema || {}}
               />
             </div>
-          )
+          ),
         )}
       </div>
     </div>
