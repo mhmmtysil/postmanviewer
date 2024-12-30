@@ -20,6 +20,7 @@ const Detail = ({}) => {
   const [method, setMethod] = useState<string>('');
   const [endpointDetails, setEndpointDetails] = useState<any>(null);
   const [activeResponseTab, setActiveResponseTab] = useState<string>('200');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // HTTP metodları için renk kodları
   const methodColors = {
@@ -109,7 +110,7 @@ const Detail = ({}) => {
   const responses = endpointDetails?.responses || {};
 
   return (
-    <div className="">
+    <div className="px-4 md:px-0">
       {Object.entries(openapi.paths || {}).map(
         ([pathKey, methods]: [string, any]) => {
           return Object.entries(methods).map(
@@ -128,14 +129,14 @@ const Detail = ({}) => {
                 <div
                   key={endpointId}
                   id={endpointId}
-                  className="pt-16 -mt-16 flex flex-row gap-4 w-full items-start justify-between"
+                  className="pt-16 -mt-16 flex flex-col lg:flex-row gap-4 w-full items-start justify-between"
                 >
-                  <div className="flex w-2/3 flex-col items-start bg-white p-6 rounded-lg shadow-sm border dark:bg-gray-800 dark:text-white">
+                  <div className="flex w-full lg:w-2/3 flex-col items-start bg-white p-4 md:p-6 rounded-lg shadow-sm border dark:bg-gray-800 dark:text-white">
                     {/* Başlık */}
-                    <h2 className="group relative text-2xl font-bold text-black dark:text-white">
+                    <h2 className="group relative text-xl md:text-2xl font-bold text-black dark:text-white break-words">
                       <a
                         href={`#${endpointId}`}
-                        className="before:content-['#'] no-underline absolute text-primary -left-[0.8em] pr-2.5 opacity-0 group-hover:opacity-50 hover:!opacity-100 transition-opacity duration-200"
+                        className="before:content-['#'] no-underline absolute text-primary -left-[0.8em] pr-2.5 opacity-0 group-hover:opacity-50 hover:!opacity-100 transition-opacity duration-200 hidden md:block"
                         aria-label={`Link to ${endpointId}`}
                       ></a>
                       <span
@@ -150,7 +151,9 @@ const Detail = ({}) => {
 
                     {/* Açıklama */}
                     <div className="prose dark:prose-invert prose-neutral max-w-full prose-img:max-w-prose mt-4">
-                      <p>{details.description || 'Açıklama bulunamadı.'}</p>
+                      <p className="text-sm md:text-base">
+                        {details.description || 'Açıklama bulunamadı.'}
+                      </p>
                     </div>
 
                     {/* İstek Gövdesi - Sadece POST, PUT, PATCH metodları için */}
@@ -159,7 +162,7 @@ const Detail = ({}) => {
                     ) &&
                       details.requestBody?.content?.['application/json']?.schema
                         ?.properties && (
-                        <div className="mt-6 w-full">
+                        <div className="mt-6 w-full overflow-x-auto">
                           <JsonViewer
                             title="İstek Gövdesi"
                             jsonData={
@@ -173,20 +176,20 @@ const Detail = ({}) => {
                     {/* Request Body */}
                     {pathParams.length > 0 && (
                       <div className="mt-6 w-full">
-                        <h3 className="text-lg font-semibold mb-4">
+                        <h3 className="text-base md:text-lg font-semibold mb-4">
                           Request Body
                         </h3>
                         <div className="space-y-4">
                           {pathParams.map((parameter: any) => (
                             <div
                               key={parameter.name}
-                              className="border dark:border-gray-700 rounded-lg p-4"
+                              className="border dark:border-gray-700 rounded-lg p-3 md:p-4"
                             >
-                              <div className="flex items-center gap-2">
-                                <span className="font-medium">
+                              <div className="flex flex-wrap items-center gap-2">
+                                <span className="font-medium text-sm md:text-base">
                                   {parameter.name}
                                 </span>
-                                <span className="text-sm text-gray-500 dark:text-gray-400">
+                                <span className="text-xs md:text-sm text-gray-500 dark:text-gray-400">
                                   ({parameter.in})
                                 </span>
                                 {parameter.required && (
@@ -195,14 +198,14 @@ const Detail = ({}) => {
                                   </span>
                                 )}
                               </div>
-                              <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">
+                              <p className="text-xs md:text-sm text-gray-600 dark:text-gray-300 mt-2">
                                 {parameter.description || 'Açıklama bulunamadı'}
                               </p>
-                              <div className="text-sm mt-1">
+                              <div className="text-xs md:text-sm mt-1">
                                 <span className="text-gray-500 dark:text-gray-400">
                                   Tip:{' '}
                                 </span>
-                                <code className="text-sm bg-gray-100 dark:bg-gray-700 px-1 py-0.5 rounded">
+                                <code className="text-xs md:text-sm bg-gray-100 dark:bg-gray-700 px-1 py-0.5 rounded">
                                   {parameter.schema?.type || 'belirsiz'}
                                 </code>
                               </div>
@@ -216,20 +219,20 @@ const Detail = ({}) => {
                     {methodKey.toLowerCase() === 'get' &&
                       queryParams.length > 0 && (
                         <div className="mt-6 w-full">
-                          <h3 className="text-lg font-semibold mb-4">
+                          <h3 className="text-base md:text-lg font-semibold mb-4">
                             Query Parametreleri
                           </h3>
                           <div className="space-y-4">
                             {queryParams.map((parameter: any) => (
                               <div
                                 key={parameter.name}
-                                className="border dark:border-gray-700 rounded-lg p-4"
+                                className="border dark:border-gray-700 rounded-lg p-3 md:p-4"
                               >
-                                <div className="flex items-center gap-2">
-                                  <span className="font-medium">
+                                <div className="flex flex-wrap items-center gap-2">
+                                  <span className="font-medium text-sm md:text-base">
                                     {parameter.name}
                                   </span>
-                                  <span className="text-sm text-gray-500 dark:text-gray-400">
+                                  <span className="text-xs md:text-sm text-gray-500 dark:text-gray-400">
                                     ({parameter.in})
                                   </span>
                                   {parameter.required && (
@@ -238,15 +241,15 @@ const Detail = ({}) => {
                                     </span>
                                   )}
                                 </div>
-                                <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">
+                                <p className="text-xs md:text-sm text-gray-600 dark:text-gray-300 mt-2">
                                   {parameter.description ||
                                     'Açıklama bulunamadı'}
                                 </p>
-                                <div className="text-sm mt-1">
+                                <div className="text-xs md:text-sm mt-1">
                                   <span className="text-gray-500 dark:text-gray-400">
                                     Tip:{' '}
                                   </span>
-                                  <code className="text-sm bg-gray-100 dark:bg-gray-700 px-1 py-0.5 rounded">
+                                  <code className="text-xs md:text-sm bg-gray-100 dark:bg-gray-700 px-1 py-0.5 rounded">
                                     {parameter.schema?.type || 'belirsiz'}
                                   </code>
                                 </div>
@@ -259,16 +262,16 @@ const Detail = ({}) => {
                     {/* Response Özellikleri */}
                     {details.responses && (
                       <div className="mt-6 w-full">
-                        <h3 className="text-lg font-semibold mb-4">
+                        <h3 className="text-base md:text-lg font-semibold mb-4">
                           Responses
                         </h3>
-                        <div className="flex gap-2 mb-4">
+                        <div className="flex flex-wrap gap-2 mb-4">
                           {Object.keys(details.responses).map((statusCode) => (
                             <button
                               key={statusCode}
                               type="button"
                               onClick={() => setActiveResponseTab(statusCode)}
-                              className={`px-3 py-1 rounded-md text-sm font-medium ${
+                              className={`px-2 md:px-3 py-1 rounded-md text-xs md:text-sm font-medium ${
                                 activeResponseTab === statusCode
                                   ? `bg-gray-100 dark:bg-gray-700 ${
                                       statusColors[
@@ -282,7 +285,7 @@ const Detail = ({}) => {
                             </button>
                           ))}
                         </div>
-                        <div className="bg-[#0D1117] rounded-lg p-4 text-white">
+                        <div className="bg-[#0D1117] rounded-lg p-3 md:p-4 text-white overflow-x-auto">
                           {Object.entries(details.responses).map(
                             ([statusCode, response]: [string, any]) => (
                               <div
@@ -305,11 +308,11 @@ const Detail = ({}) => {
                                         className="flex items-start gap-4 border-b border-gray-700 pb-4"
                                       >
                                         <div className="flex-1">
-                                          <div className="flex items-center gap-2">
-                                            <span className="text-white">
+                                          <div className="flex flex-wrap items-center gap-2">
+                                            <span className="text-white text-sm md:text-base">
                                               {key}
                                             </span>
-                                            <span className="text-gray-400">
+                                            <span className="text-gray-400 text-xs md:text-sm">
                                               {value.type}
                                             </span>
                                             {!value.required && (
@@ -319,7 +322,7 @@ const Detail = ({}) => {
                                             )}
                                           </div>
                                           {value.description && (
-                                            <p className="text-sm text-gray-400 mt-1">
+                                            <p className="text-xs md:text-sm text-gray-400 mt-1">
                                               {value.description}
                                             </p>
                                           )}
@@ -335,7 +338,7 @@ const Detail = ({}) => {
                       </div>
                     )}
                   </div>
-                  <div className="w-1/3">
+                  <div className="w-full lg:w-1/3 sticky top-4">
                     <RequestTemplate
                       method={methodKey}
                       url={pathKey}
